@@ -1,4 +1,4 @@
-from machine import Pin, Signal, PWM, I2C, UART
+from machine import Pin, Signal, PWM, SoftI2C, UART
 
 
 class Mosfet:
@@ -15,14 +15,25 @@ class Mosfet:
 	def off(self):
 		self.__pwm.duty(pwm_max)
 
-		
+
+def invert_pwm(pwm):
+	return pwm_min+(pwm_max-pwm)
+
+def led(value):
+	Pin(32, Pin.OUT).value(value)
+
+def fan(value):
+	PWM(Pin(23), freq=pwm_fan_freq, duty=value)
+
+
+
 pwm_fan_freq  = 25000
 pwm_base_freq = 1000
 pwm_min = 0
 pwm_max = 1023
 
 
-i2c  = I2C(scl=Pin(22), sda=Pin(21))
+i2c  = SoftI2C(scl=Pin(22), sda=Pin(21))
 uart = UART(2, 9600)
 
 q1 = Mosfet(Pin(33), pwm_base_freq, pwm_max)
@@ -36,12 +47,4 @@ q7 = Mosfet(Pin(18), pwm_base_freq, pwm_max)
 q8 = Signal(Pin(19, Pin.OUT), invert=True)
 
 
-def invert_pwm(pwm):
-	return pwm_min+(pwm_max-pwm)
-
-def led(value):
-	Pin(32, Pin.OUT).value(value)
-
-def fan(value):
-	PWM(Pin(23), freq=pwm_fan_freq, duty=value);
 

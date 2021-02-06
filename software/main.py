@@ -21,6 +21,7 @@ def startSequention():
 	return
 
 
+
 peltiers3V = [
 	cb.q1,
 	cb.q2
@@ -37,13 +38,6 @@ pump = cb.q7
 
 th.start_new_thread(startSequention, ())
 
-while True:
-	cb.led(1)
 
-	sleep(0.1)
-
-	cb.led(0)
-
-	sleep(0.1)
 
 
